@@ -1,4 +1,5 @@
 import { FastifyInstance } from 'fastify'
+
 import { knex } from '../../config/database'
 import { checkIfExistsSessionId } from '../middleware/check-if-exists-session-id'
 

@@ -1,6 +1,7 @@
-import { randomUUID } from 'crypto'
-import { FastifyInstance } from 'fastify'
+import { randomUUID } from 'node:crypto'
+
 import { z } from 'zod'
+import { FastifyInstance } from 'fastify'
 
 import { knex } from '../../config/database'
 
