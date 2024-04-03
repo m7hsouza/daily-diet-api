@@ -7,7 +7,7 @@ declare module 'knex/types/tables' {
       id: string
       session_id?: string
       name: string
-      description: number
+      description: string
       meal_datetime: string
       in_diet: boolean
       created_at: string

@@ -1,12 +1,12 @@
 import fastify from 'fastify'
 import cookie from '@fastify/cookie'
 
+import { createMealRoute } from './routes/create-meal'
+
 const app = fastify()
 
 app.register(cookie)
 
-app.get('/', async () => {
-  return { hello: 'world' }
-})
+app.register(createMealRoute)
 
 export { app }
