@@ -21,12 +21,18 @@ export const updateMealRoute = async (app: FastifyInstance) => {
       const body = updateMealBodySchema.parse(request.body)
       const { id } = updateMealParamsSchema.parse(request.params)
 
-      await knex('meals')
+      const meal = await knex('meals')
         .where({
           id,
           session_id: request.cookies.sessionId,
         })
-        .update(body)
+        .first()
+
+      if (!meal) {
+        return reply.status(404).send()
+      }
+
+      await knex('meals').where({ id }).update(body)
 
       return reply.status(204).send()
     })
