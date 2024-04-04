@@ -6,6 +6,7 @@ import { listMealsRoute } from './route/list-meals'
 import { showMealRoute } from './route/show-meal'
 import { updateMealRoute } from './route/update-meal'
 import { deleteMealRoute } from './route/delete-meal'
+import { getMealMetricsRoute } from './route/get-meal-metrics'
 
 const app = fastify()
 
@@ -16,5 +17,6 @@ app.register(listMealsRoute)
 app.register(showMealRoute)
 app.register(updateMealRoute)
 app.register(deleteMealRoute)
+app.register(getMealMetricsRoute)
 
 export { app }
