@@ -18,6 +18,10 @@ export const showMealRoute = async (app: FastifyInstance) => {
           session_id: request.cookies.sessionId,
         })
         .first()
+
+      if (!meal) {
+        return reply.status(404).send()
+      }
       return reply.send({ meal })
     })
 }
