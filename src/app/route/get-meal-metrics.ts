@@ -8,26 +8,45 @@ export const getMealMetricsRoute = async (app: FastifyInstance) => {
     .addHook('preHandler', checkIfExistsSessionId)
     .get('/meals/metrics', async (request, reply) => {
       const sessionId = request.cookies.sessionId
-      const metrics = (await knex('meals')
+      const meals = await knex('meals')
         .where({
           session_id: sessionId,
         })
-        .groupBy('in_diet')
-        .count('id as amount')
-        .select('in_diet')) as { amount: number; in_diet: boolean }[]
+        .select('*')
 
-      const mealsCount = metrics.reduce((acc, metric) => {
-        acc += metric.amount
-        return acc
-      }, 0)
+      const { total, inDient, notInDient, betSequence } = meals.reduce(
+        (acc, meal) => {
+          acc.total += 1
 
-      const inDietCount = metrics.find((metric) => metric.in_diet)?.amount || 0
+          if (meal.in_diet) {
+            acc.inDient += 1
+            acc.currentSequence += 1
+          } else {
+            acc.notInDient += 1
+            acc.currentSequence = 0
+          }
+
+          if (acc.currentSequence > acc.betSequence) {
+            acc.betSequence = acc.currentSequence
+          }
+
+          return acc
+        },
+        {
+          total: 0,
+          inDient: 0,
+          notInDient: 0,
+          betSequence: 0,
+          currentSequence: 0,
+        },
+      )
 
       return reply.send({
         metrics: {
-          total: mealsCount,
-          in_diet: inDietCount,
-          not_in_diet: mealsCount - inDietCount,
+          total,
+          inDient,
+          notInDient,
+          betSequence,
         },
       })
     })
